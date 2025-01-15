@@ -4,7 +4,10 @@ namespace App\Enums;
 
 enum ProductUnitEnum: string
 {
-    case ADMIN = 'admin';
-    case EDITOR = 'editor';
-    case VISITOR = 'visitor';
+    case PCS = 'pcs';
+    case KILOGRAM = 'kilogram';
+    case MILIMETER = 'mililiter';
+    case LITER = 'liter';
+    case GRAM = 'gram';
+    case TON = 'ton';
 }
