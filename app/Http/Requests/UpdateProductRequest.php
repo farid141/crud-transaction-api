@@ -29,6 +29,7 @@ class UpdateProductRequest extends FormRequest
             'price' => 'numeric',
             'unit' => ['string', Rule::in(['pcs', 'kilogram', 'mililiter', 'liter', 'gram', 'ton',])],
             'quantity' => 'numeric',
+            'tags' => 'array|exists:tags,id',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }

@@ -29,6 +29,7 @@ class StoreProductRequest extends FormRequest
             'price' => 'required|numeric',
             'unit' => ['required', 'string', Rule::in(['pcs', 'kilogram', 'mililiter', 'liter', 'gram', 'ton',])],
             'quantity' => 'required|numeric',
+            'tags' => 'array|exists:tags,id',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }

@@ -30,6 +30,7 @@ class ProductController extends Controller
         $validated['created_by_id'] = Auth::id();
 
         $product = Product::create($validated);
+        $product->tags()->sync($validated['tags']);
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -40,7 +41,7 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Product created successfully',
-            'product' => $product->setHidden(['media']),
+            'product' => $product->load('tags')->setHidden(['media']),
         ], 201);
     }
 
@@ -52,7 +53,7 @@ class ProductController extends Controller
         $product['images'] = $product->getMedia('images')->map(function ($image) {
             return $image->getUrl();
         });
-        return response()->json($product->makeHidden(['media']));
+        return response()->json($product->load('tags')->makeHidden(['media']));
     }
 
     /**
@@ -72,12 +73,14 @@ class ProductController extends Controller
         }
 
         $product->update($validated);
+        $product->tags()->sync($validated['tags']);
+
         $product->save();
         DB::commit();
 
         return response()->json([
             'message' => 'Product updated successfully',
-            'product' => $product->setHidden(['media']),
+            'product' => $product->load('tags')->setHidden(['media']),
         ], 201);
     }
 

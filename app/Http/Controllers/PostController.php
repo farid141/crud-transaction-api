@@ -30,6 +30,7 @@ class PostController extends Controller
         $validated['created_by_id'] = Auth::id();
 
         $post = Post::create($validated);
+        $post->tags()->sync($validated['tags']);
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -40,7 +41,7 @@ class PostController extends Controller
 
         return response()->json([
             'message' => 'Post created successfully',
-            'post' => $post->setHidden(['media']),
+            'post' => $post->load('tags')->setHidden(['media']),
         ], 201);
     }
 
@@ -52,7 +53,7 @@ class PostController extends Controller
         $post['images'] = $post->getMedia('images')->map(function ($image) {
             return $image->getUrl();
         });
-        return response()->json($post->makeHidden(['media']));
+        return response()->json($post->load('tags')->makeHidden(['media']));
     }
 
     /**
@@ -72,12 +73,14 @@ class PostController extends Controller
         }
 
         $post->update($validated);
+        $post->tags()->sync($validated['tags']);
+
         $post->save();
         DB::commit();
 
         return response()->json([
             'message' => 'Post updated successfully',
-            'post' => $post->setHidden(['media']),
+            'post' => $post->load('tags')->setHidden(['media']),
         ], 201);
     }
 

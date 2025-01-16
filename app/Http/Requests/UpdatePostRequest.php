@@ -27,6 +27,7 @@ class UpdatePostRequest extends FormRequest
         return [
             'title' => ['string', Rule::unique('posts', 'title')->ignore($this->post->id)],
             'content' => 'string',
+            'tags' => 'array|exists:tags,id',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }
