@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\TransactionCreated;
 use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
@@ -28,6 +29,15 @@ class Transaction extends Model
             'updated_at' => 'datetime:H:i:s - d M, Y',
         ];
     }
+
+    /**
+     * The event map for the model.
+     *
+     * @var array<string, string>
+     */
+    protected $dispatchesEvents = [
+        'created' => TransactionCreated::class,
+    ];
 
     public function created_by()
     {
